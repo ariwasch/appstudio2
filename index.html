@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags and Title -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washed Up Apps</title>
+    <!-- Favicon -->
+    <link rel="icon" href="wash.png" type="image/png">
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <style>
+        /* Reset and Base Styles */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            background-color: #05051a; /* Very dark blue */
+            color: #E0E0E0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            position: relative;
+            padding-top: 80px; /* Adjusted for fixed header */
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Header Styles */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 26, 0.7); /* Semi-transparent dark blue background */
+            backdrop-filter: blur(10px); /* Optional: adds a blur effect */
+            z-index: 10; /* Ensure the header is above other elements */
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px; /* Adjust size as needed */
+            height: 40px;
+            margin-right: 0.5rem;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: #FFFFFF;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0%;
+            height: 2px;
+            background: #3B82F6;
+            transition: width 0.3s;
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+        }
+
+        .nav-link:hover {
+            color: #3B82F6;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Menu Icon */
+        .menu-icon {
+            display: none; /* Hidden by default */
+            cursor: pointer;
+            color: #FFFFFF;
+            font-size: 1.5rem;
+        }
+
+        /* Canvas Background */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Section Styles */
+        section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: rgba(5, 5, 26, 0.95);
+            color: #FFFFFF;
+            padding: 6rem 2rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: #FFFFFF;
+            width: 60%; /* Restrict to 60% of the container */
+        }
+
+        .hero-section .highlight {
+            color: #3B82F6; /* Blue color for "473%" */
+        }
+
+        .hero-blurb {
+            font-size: 1.2rem;
+            color: #B3B3B3;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .hero-button {
+            background-color: #3B82F6;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 1rem;
+            font-weight: 500;
+            align-self: flex-start; /* Aligns the button to the left */
+        }
+
+        .hero-button:hover {
+            background-color: #2563EB;
+            transform: translateY(-2px);
+        }
+
+        /* New Revenue Section Styles */
+        .revenue-section {
+            background-color: rgba(5, 5, 26, 0.95);
+            color: #FFFFFF;
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ensure full-screen height */
+            scroll-snap-align: start; /* Enable scroll snapping */
+        }
+
+        .revenue-content {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .revenue-content h2 {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .revenue-image {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .revenue-image img {
+            max-width: 80%;
+            height: auto;
+        }
+
+        @media (max-width: 992px) {
+            .revenue-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .revenue-content {
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .revenue-image img {
+                max-width: 100%;
+            }
+
+        }
+
+        /* Our Numbers Section */
+        .numbers-section {
+            background-color: rgba(5, 5, 26, 0.0);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .numbers-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem; /* Space between heading and boxes */
+        }
+
+        .numbers-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .number-box {
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 12px;
+            padding: 2rem;
+            flex: 1 1 200px;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .number-box:hover {
+            transform: translateY(-5px);
+            background-color: rgba(30, 30, 30, 0.95);
+        }
+
+        .number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3B82F6;
+            margin-bottom: 0.5rem;
+        }
+
+        .label {
+            font-size: 1.2rem;
+            color: #CCCCCC;
+        }
+
+        /* App Portfolio Layout */
+        .app-portfolio {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the app items */
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px; /* Ensure the portfolio doesn't exceed this width */
+            margin: 0 auto; /* Center the portfolio section */
+        }
+
+        .app-portfolio h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #FFFFFF;
+            animation: fadeInDown 1s ease-out forwards;
+        }
+
+        /* App Item Styling */
+        .app-item {
+            display: flex;
+            align-items: center;
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            width: 100%; /* Make each app-item take full width of the portfolio */
+            max-width: 800px; /* Optional: Restrict maximum width for better readability */
+            gap: 0.5rem; /* Reduced gap for closer spacing */
+        }
+
+        /* Animate on Load */
+        .app-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image Left Layout */
+        .app-item.image-left {
+            flex-direction: row;
+        }
+
+        .app-item.image-left .app-details {
+            text-align: right;
+            align-items: flex-end; /* Align content to the right */
+        }
+
+        .app-item.image-left .app-button {
+            align-self: flex-end; /* Right align the button */
+        }
+
+        /* Image Right Layout */
+        .app-item.image-right {
+            flex-direction: row-reverse;
+        }
+
+        .app-item.image-right .app-details {
+            text-align: left;
+            align-items: flex-start; /* Align content to the left */
+        }
+
+        .app-item.image-right .app-button {
+            align-self: flex-start; /* Left align the button */
+        }
+
+        /* App Image */
+        .app-image {
+            flex: 1;
+            max-width: 20%;
+            margin: 0; /* Removed margin for closer spacing */
+        }
+
+        .app-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .app-image img:hover {
+            transform: scale(1.05);
+        }
+
+        /* App Details */
+        .app-details {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* App Title */
+        .app-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #FFFFFF;
+        }
+
+        /* App Description */
+        .app-description {
+            font-size: 1.1rem;
+            color: #B3B3B3;
+            margin-bottom: 1.5rem;
+        }
+
+        /* App Stats */
+        .app-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3B82F6;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #CCCCCC;
+        }
+
+        /* App Button */
+        .app-button {
+            background-color: #3B82F6;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .app-button:hover {
+            background-color: #2563EB;
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background: rgba(5, 5, 26, 0.95);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .testimonials-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .xyz-blurb {
+            background-color: rgba(5, 5, 26, 0.95);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            font-size: 1.5rem; /* Added this line to increase font size */
+        }
+
+        .testimonial-divider {
+            width: 100%;
+            height: 2px;
+            background-color: #3B82F6;
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .testimonial {
+            display: flex;
+            align-items: flex-start;
+            text-align: left;
+            gap: 2rem;
+        }
+
+        .testimonial:last-child {
+            margin-bottom: 0;
+        }
+
+        .testimonial-image {
+            flex-shrink: 0;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #3B82F6;
+        }
+
+        blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        /* Stars for Rating */
+        .stars {
+            color: #FFD700; /* Gold color for stars */
+            margin-bottom: 1rem;
+        }
+
+        .stars i {
+            margin-right: 0.2rem;
+        }
+
+        cite {
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        .influencer-info {
+            display: block;
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: rgba(5, 5, 26, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .social-links a {
+            color: #3B82F6;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-links a:hover {
+            color: #2563EB;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #777777;
+            font-size: 0.9rem;
+            border-top: 1px solid #333333;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .app-item {
+                max-width: 95%; /* Allow app-items to take up more space on smaller screens */
+            }
+        }
+
+        @media (max-width: 992px) {
+            .app-item {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .app-image {
+                max-width: 80%;
+                margin: 1rem 0;
+            }
+
+            .app-details {
+                align-items: center;
+                text-align: center;
+            }
+
+            .app-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            /* Numbers Section Adjustments */
+            .numbers-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            /* Hero Section Adjustments */
+            .hero-section {
+                align-items: center;      /* Centers items on smaller screens */
+                text-align: center;       /* Centers text */
+            }
+
+            .hero-section h1 {
+                width: 80%; /* Adjust width on smaller screens */
+            }
+
+            .hero-blurb {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .hero-button {
+                align-self: center;       /* Centers the button */
+            }
+            .app-item.image-left, .app-item.image-right {
+                flex-direction: column;
+            }
+
+            /* Testimonials Adjustments */
+            .testimonial {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .testimonial-image {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            blockquote {
+                font-size: 1.2rem;
+                padding-left: 0;
+            }
+
+            .stars {
+                justify-content: center;
+            }
+
+            /* Testimonials Blurb Adjustment */
+            .testimonials-blurb {
+                font-size: 1rem;
+            }
+
+            /* Mobile Navigation Menu */
+            .navigation {
+                display: none; /* Hide the navigation menu by default */
+                position: absolute;
+                top: 80px; /* Adjust according to header height */
+                left: 0;
+                width: 100%;
+                background: rgba(5, 5, 26, 0.95);
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem 0;
+                z-index: 9;
+            }
+            .navigation.active {
+                display: flex; /* Show the navigation menu when active */
+            }
+            .menu-icon {
+                display: block; /* Show the menu icon on small screens */
+            }
+            .site-header {
+                justify-content: space-between; /* Adjust header alignment */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 4rem 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+                width: 80%; /* Further adjust width */
+            }
+
+            .hero-blurb {
+                font-size: 1rem;
+            }
+
+            .app-title {
+                font-size: 1.8rem;
+            }
+
+            .app-description {
+                font-size: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.2rem;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+            }
+
+            .app-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            .numbers-section h2 {
+                font-size: 2rem;
+            }
+
+            .number {
+                font-size: 2.5rem;
+            }
+
+            .label {
+                font-size: 1rem;
+            }
+
+            .section-break {
+                height: 30px;
+            }
+
+            .testimonials-section h2 {
+                font-size: 2rem;
+            }
+
+            blockquote {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 3rem 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+                width: 100%; /* Full width on very small screens */
+            }
+
+            .hero-blurb {
+                font-size: 0.9rem;
+            }
+
+            .hero-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .app-stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .numbers-container {
+                gap: 1rem;
+            }
+
+            .number-box {
+                padding: 1.5rem;
+            }
+
+            .section-break {
+                height: 20px;
+            }
+
+            .stars {
+                gap: 0.2rem;
+            }
+
+            .testimonials-blurb {
+                font-size: 0.9rem;
+            }
+        }
+        /* Styling for Explore All Apps button */
+        .explore-all-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .explore-all-button {
+            background-color: #3B82F6;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .explore-all-button:hover {
+            background-color: #2563EB;
+            transform: translateY(-2px);
+        }
+
+        /* Section Break Styling */
+        .section-break {
+            width: 100%;
+            height: 50px; /* Adjust the height as needed */
+            background-color: transparent; /* Can be changed to a color or include a decorative element */
+            margin-bottom: 2rem; /* Space before the Numbers Section */
+        }
+
+        /* Smaller Break for Internal Separation */
+        .section-break.small-break {
+            height: 20px; /* Adjust height for smaller separation */
+            margin-bottom: 1.5rem; /* Space after the heading */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="site-header">
+        <div class="logo-container">
+            <img src="wash.png" alt="Washed Up Apps Logo" class="logo">
+            <span class="site-title">Washed Up Apps</span>
+        </div>
+        <!-- Hamburger Menu Icon -->
+        <div class="menu-icon" id="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <!-- Navigation Menu -->
+        <nav class="navigation" id="nav-menu">
+            <a href="#hero" class="nav-link">Home</a>
+            <a href="#apps" class="nav-link">Apps</a>
+            <a href="#testimonials" class="nav-link">Testimonials</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Canvas for Moving Starry Background -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+        <h1>See <span class="highlight">473%</span> Increase in Your Income with Washed Up Apps</h1>
+        <p class="hero-blurb">You're sitting on untapped potential. We build digital products that turn your reach into a viable subscription business and scale your earnings exponentially.</p>
+        <button class="hero-button" onclick="window.location.href='#contact'">Get Started</button>
+    </section>
+
+    <!-- New Revenue Stream Section -->
+    <section class="revenue-section">
+        <div class="revenue-content">
+            <h2>Unlock a New Revenue Stream</h2>
+        </div>
+        <div class="revenue-image">
+            <img src="revenuecatchat.png" alt="Revenue Stream Image" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Break Before Numbers Section -->
+    <div class="section-break"></div>
+
+    <!-- Our Numbers Section -->
+    <section class="numbers-section">
+        <h2>Our Numbers Speak for Themselves</h2>
+        <div class="numbers-container">
+            <div class="number-box">
+                <div class="number">160K+</div>
+                <div class="label">Downloads</div>
+            </div>
+            <div class="number-box">
+                <div class="number">16</div>
+                <div class="label">Apps Launched</div>
+            </div>
+            <div class="number-box">
+                <div class="number">4M+</div>
+                <div class="label">App Impressions</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Portfolio Section -->
+    <section class="app-portfolio" id="apps">
+        <br>
+        <h2>Some Apps We Worked On</h2>
+
+        <!-- RizzGPT App Item -->
+        <div class="app-item animate image-right" id="app2" data-delay="0.2s">
+            <div class="app-image">
+                <img src="3.png" alt="RizzGPT Screenshot" loading="lazy">
+            </div>
+            <div class="app-details">
+                <h2 class="app-title">RizzGPT</h2>
+                <p class="app-description">Your AI-powered dating wingman to craft the perfect messages.</p>
+                <div class="app-stats">
+                    <div class="stat">
+                        <span class="stat-number">70K+</span>
+                        <span class="stat-label">Downloads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">1M+</span>
+                        <span class="stat-label">Impressions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.1/5</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+                <button class="app-button" onclick="window.location.href='https://apps.apple.com/us/app/rizzgpt-ai-dating-wingman/id6444730312?platform=iphone'">More Info</button>
+            </div>
+        </div>
+
+        <!-- MemeGPT App Item -->
+        <div class="app-item animate image-right" id="app2" data-delay="0.2s">
+            <div class="app-image">
+                <img src="5.png" alt="MemeGPT Screenshot" loading="lazy">
+            </div>
+            <div class="app-details">
+                <h2 class="app-title">MemeGPT</h2>
+                <p class="app-description">Create hilarious memes effortlessly with AI-driven tools.</p>
+                <div class="app-stats">
+                    <div class="stat">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Downloads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">400K+</span>
+                        <span class="stat-label">Impressions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9/5</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+                <button class="app-button" onclick="window.location.href='https://apps.apple.com/us/app/memegpt-ai-meme-generator/id6476749813'">More Info</button>
+            </div>
+        </div>
+
+        <!-- Bald AI App Item -->
+        <div class="app-item animate image-right" id="app3" data-delay="0.3s">
+            <div class="app-image">
+                <img src="baldai.png" alt="Bald AI Screenshot" loading="lazy">
+            </div>
+            <div class="app-details">
+                <h2 class="app-title">Bald AI</h2>
+                <p class="app-description">Track, manage, and fight hair loss with an AI companion made to regain your confidence.</p>
+                <div class="app-stats">
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Downloads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">1M+</span>
+                        <span class="stat-label">Impressions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.8/5</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+                <button class="app-button" onclick="window.location.href='#'">Download Now</button>
+            </div>
+        </div>
+
+        <!-- Watevent App Item -->
+        <div class="app-item animate image-right" id="app4" data-delay="0.4s">
+            <div class="app-image">
+                <img src="4.png" alt="Watevent Screenshot" loading="lazy">
+            </div>
+            <div class="app-details">
+                <h2 class="app-title">Watevent</h2>
+                <p class="app-description">Discover and join local fun events tailored to your interests.</p>
+                <div class="app-stats">
+                    <div class="stat">
+                        <span class="stat-number">5K+</span>
+                        <span class="stat-label">Downloads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100K+</span>
+                        <span class="stat-label">Impressions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9/5</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+                <button class="app-button" onclick="window.location.href='https://apps.apple.com/us/app/watevent-local-fun-events/id6475428219?platform=iphone'">More Info</button>
+            </div>
+        </div>
+        <div class="explore-all-container">
+            <button class="explore-all-button" onclick="window.location.href='https://washedupapps.com/apps'">See More</button>
+        </div>
+    
+        <br>
+        <br>
+
+        <!-- Add more app-item divs as needed -->
+    </section>
+
+    <!-- Break Before Testimonials Section -->
+    <div class="section-break"></div>
+
+    <!-- Testimonials Section with Integrated XYZ Blurb -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="xyz-blurb">
+            <p>At Washed Up Apps, we specialize in crafting innovative apps that transform your ideas into engaging digital experiences, delivering exceptional results for our clients.</p>
+        </div>
+        <div class="testimonial-divider"></div>
+
+        <div class="testimonial-container">
+            <!-- First Testimonial -->
+            <div class="testimonial">
+                <div class="testimonial-image">
+                    <img src="face.jpg" alt="Aadit Sheth profile picture" class="profile-pic">
+                </div>
+                <div>
+                    <blockquote>
+                        "Partnering with Washed Up Apps made all the difference. I'm not technical at all, but they helped me go from idea to launch effortlessly. My income tripled, and the audience loved the product."
+                    </blockquote>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <cite>
+                        Aadit Sheth (@aaditsh)<br>
+                        <span class="influencer-info">Twitter Influencer (296k followers)</span>
+                    </cite>
+                </div>
+            </div>
+            <!-- Second Testimonial -->
+            <div class="testimonial">
+                <div class="testimonial-image">
+                    <img src="3e8.jpeg" alt="Jane Doe profile picture" class="profile-pic">
+                </div>
+                <div>
+                    <blockquote>
+                        "Working with Washed Up Apps was a game-changer. Their expertise in AI and app development helped me create a product that my audience couldn't get enough of. My revenue soared beyond expectations."
+                    </blockquote>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <cite>
+                        @3.0e8<br>
+                        <span class="influencer-info">TikTok Content Creator (195k followers)</span>
+                    </cite>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <h2>Connect with Us</h2>
+        <div class="social-links">
+            <a href="https://x.com/ariwasch" target="_blank" aria-label="Ari's Twitter Profile">
+                <i class="fab fa-twitter"></i> Ari
+            </a>
+            <a href="https://x.com/amaan_shabeer" target="_blank" aria-label="Amaan's Twitter Profile">
+                <i class="fab fa-twitter"></i> Amaan
+            </a>
+            <a href="https://x.com/diabyismael" target="_blank" aria-label="Ismael's Twitter Profile">
+                <i class="fab fa-twitter"></i> Ismael
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Washed Up Apps. All rights reserved.
+    </footer>
+
+    <!-- JavaScript for Scroll-triggered Animations, Hamburger Menu, and Starfield with Shooting Stars -->
+    <script>
+        // Starfield and Shooting Stars Animation
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        // Resize canvas to full window size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Star class
+        class Star {
+            constructor(x, y, radius, speed, opacity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.speed = speed;
+                this.opacity = opacity;
+                this.direction = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += Math.cos(this.direction) * this.speed;
+                this.y += Math.sin(this.direction) * this.speed;
+
+                // Wrap around the screen
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        // Shooting Star class
+        class ShootingStar {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = 0; // Start from top
+                this.length = Math.random() * 100 + 50; // Length between 50 to 150
+                this.speed = Math.random() * 10 + 10; // Speed between 10 to 20
+                this.opacity = 1;
+                this.angle = Math.PI / 4; // 45 degrees
+                this.velocityX = Math.cos(this.angle) * this.speed;
+                this.velocityY = Math.sin(this.angle) * this.speed;
+                this.isActive = true;
+                // Random delay before next shooting star
+                this.delay = Math.random() * 5000; // 0 to 5 seconds
+                this.timer = 0;
+            }
+
+            update(deltaTime) {
+                if (!this.isActive) {
+                    this.timer += deltaTime;
+                    if (this.timer >= this.delay) {
+                        this.reset();
+                    }
+                    return;
+                }
+
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+
+                // Fade out
+                this.opacity -= 0.01;
+                if (this.opacity <= 0) {
+                    this.isActive = false;
+                }
+
+                // Remove if out of bounds
+                if (this.x > canvas.width + this.length || this.y > canvas.height + this.length) {
+                    this.isActive = false;
+                }
+            }
+
+            draw(ctx) {
+                if (!this.isActive) return;
+
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - this.velocityX * this.length / this.speed, this.y - this.velocityY * this.length / this.speed);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        // Initialize stars and shooting stars
+        const stars = [];
+        const shootingStars = [];
+        const numStars = 100;
+        const numShootingStars = 3; // Number of shooting stars to manage
+
+        for (let i = 0; i < numStars; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const radius = Math.random() * 1.5 + 0.5;
+            const speed = Math.random() * 0.5 + 0.2;
+            const opacity = Math.random() * 0.5 + 0.5;
+            stars.push(new Star(x, y, radius, speed, opacity));
+        }
+
+        for (let i = 0; i < numShootingStars; i++) {
+            shootingStars.push(new ShootingStar());
+        }
+
+        let lastTime = performance.now();
+
+        // Animation loop
+        function animate(time) {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let star of stars) {
+                star.update();
+                star.draw(ctx);
+            }
+            for (let shootingStar of shootingStars) {
+                shootingStar.update(deltaTime);
+                shootingStar.draw(ctx);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Scroll-triggered Animations using Intersection Observer
+        document.addEventListener('DOMContentLoaded', function() {
+            const appItems = document.querySelectorAll('.app-item');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.dataset.delay || '0s';
+                        entry.target.style.transitionDelay = delay;
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            appItems.forEach(item => {
+                observer.observe(item);
+            });
+
+            // Hamburger Menu Toggle
+            const menuIcon = document.getElementById('menu-icon');
+            const navMenu = document.getElementById('nav-menu');
+
+            menuIcon.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
